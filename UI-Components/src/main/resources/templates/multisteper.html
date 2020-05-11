@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<style>
+		/* Simple setup for this demo */
+		.mdl-card {
+			width: 550px;
+			min-height: 0;
+			margin: 10px auto;
+		}
+
+		.mdl-card__supporting-text {
+			width: 100%;
+			padding: 0;
+		}
+
+		.mdl-stepper-horizontal-alternative .mdl-stepper-step {
+			width: 25%;
+			/* 100 / no_of_steps */
+		}
+
+		/* Begin actual mdl-stepper css styles */
+		.mdl-stepper-horizontal-alternative {
+			display: table;
+			width: 100%;
+			margin: 0 auto;
+		}
+
+		.mdl-stepper-horizontal-alternative .mdl-stepper-step {
+			display: table-cell;
+			position: relative;
+			padding: 24px;
+		}
+
+		.mdl-stepper-horizontal-alternative .mdl-stepper-step:hover,
+		.mdl-stepper-horizontal-alternative .mdl-stepper-step:active {
+			background-color: rgba(0, 0, 0, .06);
+		}
+
+		.mdl-stepper-horizontal-alternative .mdl-stepper-step:active {
+			border-radius: 15%/75%;
+		}
+
+		.mdl-stepper-horizontal-alternative .mdl-stepper-step:first-child:active {
+			border-top-left-radius: 0;
+			border-bottom-left-radius: 0;
+		}
+
+		.mdl-stepper-horizontal-alternative .mdl-stepper-step:last-child:active {
+			border-top-right-radius: 0;
+			border-bottom-right-radius: 0;
+		}
+
+		.mdl-stepper-horizontal-alternative .mdl-stepper-step:hover .mdl-stepper-circle {
+			background-color: #757575;
+		}
+
+		.mdl-stepper-horizontal-alternative .mdl-stepper-step:first-child .mdl-stepper-bar-left,
+		.mdl-stepper-horizontal-alternative .mdl-stepper-step:last-child .mdl-stepper-bar-right {
+			display: none;
+		}
+
+		.mdl-stepper-horizontal-alternative .mdl-stepper-step .mdl-stepper-circle {
+			width: 24px;
+			height: 24px;
+			margin: 0 auto;
+			background-color: #9E9E9E;
+			border-radius: 50%;
+			text-align: center;
+			line-height: 2em;
+			font-size: 12px;
+			color: white;
+		}
+
+		.mdl-stepper-horizontal-alternative .mdl-stepper-step.active-step .mdl-stepper-circle {
+			background-color: rgb(33, 150, 243);
+		}
+
+		.mdl-stepper-horizontal-alternative .mdl-stepper-step.step-done .mdl-stepper-circle:before {
+			content: "\2714";
+		}
+
+		.mdl-stepper-horizontal-alternative .mdl-stepper-step.step-done .mdl-stepper-circle *,
+		.mdl-stepper-horizontal-alternative .mdl-stepper-step.editable-step .mdl-stepper-circle * {
+			display: none;
+		}
+
+		.mdl-stepper-horizontal-alternative .mdl-stepper-step.editable-step .mdl-stepper-circle {
+			-moz-transform: scaleX(-1);
+			/* Gecko */
+			-o-transform: scaleX(-1);
+			/* Opera */
+			-webkit-transform: scaleX(-1);
+			/* Webkit */
+			transform: scaleX(-1);
+			/* Standard */
+		}
+
+		.mdl-stepper-horizontal-alternative .mdl-stepper-step.editable-step .mdl-stepper-circle:before {
+			content: "\270E";
+		}
+
+		.mdl-stepper-horizontal-alternative .mdl-stepper-step .mdl-stepper-title {
+			margin-top: 16px;
+			font-size: 14px;
+			font-weight: normal;
+		}
+
+		.mdl-stepper-horizontal-alternative .mdl-stepper-step .mdl-stepper-title,
+		.mdl-stepper-horizontal-alternative .mdl-stepper-step .mdl-stepper-optional {
+			text-align: center;
+			color: rgba(0, 0, 0, .26);
+		}
+
+		.mdl-stepper-horizontal-alternative .mdl-stepper-step.active-step .mdl-stepper-title {
+			font-weight: 500;
+			color: rgba(0, 0, 0, .87);
+		}
+
+		.mdl-stepper-horizontal-alternative .mdl-stepper-step.active-step.step-done .mdl-stepper-title,
+		.mdl-stepper-horizontal-alternative .mdl-stepper-step.active-step.editable-step .mdl-stepper-title {
+			font-weight: 300;
+		}
+
+		.mdl-stepper-horizontal-alternative .mdl-stepper-step .mdl-stepper-optional {
+			font-size: 12px;
+		}
+
+		.mdl-stepper-horizontal-alternative .mdl-stepper-step.active-step .mdl-stepper-optional {
+			color: rgba(0, 0, 0, .54);
+		}
+
+		.mdl-stepper-horizontal-alternative .mdl-stepper-step .mdl-stepper-bar-left,
+		.mdl-stepper-horizontal-alternative .mdl-stepper-step .mdl-stepper-bar-right {
+			position: absolute;
+			top: 36px;
+			height: 1px;
+			border-top: 1px solid #BDBDBD;
+		}
+
+		.mdl-stepper-horizontal-alternative .mdl-stepper-step .mdl-stepper-bar-right {
+			right: 0;
+			left: 50%;
+			margin-left: 20px;
+		}
+
+		.mdl-stepper-horizontal-alternative .mdl-stepper-step .mdl-stepper-bar-left {
+			left: 0;
+			right: 50%;
+			margin-right: 20px;
+		}
+	</style>
+
+</head>
+<body>
+<div layout:fragment="content">
+	<div class="container-fluid">
+<nav aria-label="breadcrumb" class="mt-2">
+   <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="indexwithsm">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Multi step form</li>
+  </ol>
+</nav>
+
+						<div id="page-wrapper">
+							<div class="row">
+								<div class="col-lg-12">
+									<h2>
+										<b>Policy Proposal Form</b>
+									</h2>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="card">
+
+										<div class="card-header">
+											<b> Shipments (Comprehensive Risks) Policy / Small
+												Exporter’s Policy / Exports(Turnover) Policy </b>
+										</div>
+										<div class="card-body">
+											<div class="row">
+												<div class="col-lg-12">
+													<div class="mdl-card mdl-shadow--2dp">
+														<div class="mdl-card__supporting-text">
+															<div class="mdl-stepper-horizontal-alternative">
+																<div class="mdl-stepper-step active-step step-done"
+																	id="divTab1Details">
+																	<div class="mdl-stepper-circle"
+																		style="background-color: #9ACE2A;">
+																		<span>1</span>
+																	</div>
+																	<div class="mdl-stepper-title">Step1 Details</div>
+																	<div class="mdl-stepper-optional">Optional</div>
+																	<div class="mdl-stepper-bar-left"></div>
+																	<div class="mdl-stepper-bar-right"></div>
+																</div>
+																<div class="mdl-stepper-step active-step"
+																	id="divTab2Details">
+																	<div class="mdl-stepper-circle">
+																		<span>2</span>
+																	</div>
+																	<div class="mdl-stepper-title">Step2 Details</div>
+																	<div class="mdl-stepper-optional">Optional</div>
+																	<div class="mdl-stepper-bar-left"></div>
+																	<div class="mdl-stepper-bar-right"></div>
+																</div>
+																<div class="mdl-stepper-step" id="divTab3Details">
+																	<div class="mdl-stepper-circle">
+																		<span>3</span>
+																	</div>
+																	<div class="mdl-stepper-title">Step3 Details</div>
+																	<div class="mdl-stepper-optional">Optional</div>
+																	<div class="mdl-stepper-bar-left"></div>
+																	<div class="mdl-stepper-bar-right"></div>
+																</div>
+																<div class="mdl-stepper-step" id="divTab4Details">
+																	<div class="mdl-stepper-circle">
+																		<span>4</span>
+																	</div>
+																	<div class="mdl-stepper-title">Step4 Details</div>
+																	<div class="mdl-stepper-optional">Optional</div>
+																	<div class="mdl-stepper-bar-left"></div>
+																	<div class="mdl-stepper-bar-right"></div>
+																</div>
+																<div class="mdl-stepper-step" id="divTab5Details">
+																	<div class="mdl-stepper-circle">
+																		<span>5</span>
+																	</div>
+																	<div class="mdl-stepper-title">Step5 Details</div>
+																	<div class="mdl-stepper-optional">Optional</div>
+																	<div class="mdl-stepper-bar-left"></div>
+																	<div class="mdl-stepper-bar-right"></div>
+																</div>
+																<div class="mdl-stepper-step" id="divTab6Details">
+																	<div class="mdl-stepper-circle">
+																		<span>6</span>
+																	</div>
+																	<div class="mdl-stepper-title">Step5 Details</div>
+																	<div class="mdl-stepper-optional">Optional</div>
+																	<div class="mdl-stepper-bar-left"></div>
+																	<div class="mdl-stepper-bar-right"></div>
+																</div>
+																<div class="mdl-stepper-step" id="divTab7Details">
+																	<div class="mdl-stepper-circle">
+																		<span>7</span>
+																	</div>
+																	<div class="mdl-stepper-title">Step7 Details</div>
+																	<div class="mdl-stepper-optional">Optional</div>
+																	<div class="mdl-stepper-bar-left"></div>
+																	<div class="mdl-stepper-bar-right"></div>
+																</div>
+
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div id="divTab1">
+												<div class="row">
+													<div class="col-lg-12">
+														<h2>Step1</h2>
+														<div class="card">
+															<div style="padding: 20px">
+																<div class="row">
+
+																	<div class="col">
+																		<h4>1. Details of export turnover in the last 12
+																			calendar months</h4>
+																	</div>
+																	<div>
+																		<input type="number" class="form-control" /> <label>Rs
+																			in Lakhs</label>
+																	</div>
+
+																</div>
+																<br>
+																<div class="table-responsive">
+																	<table
+																		class="table table-striped table-bordered table-hover">
+																		<thead>
+																			<tr>
+																				<th>Name of the major buyers</th>
+																				<th>Buyer Country</th>
+																				<th>Is Associate?</th>
+																				<th>No.of years dealing with buyer</th>
+																				<th>TOP</th>
+																				<th>Total value of Shipments</th>
+																				<th>Maximum exposure at any time</th>
+																				<th>% exports of the buyer to the total exports</th>
+																				<th></th>
+																			</tr>
+																		</thead>
+																		<tbody>
+																			<tr>
+																				<td><input type="text" class="form-control"
+																					id="tTOBuyerName"></td>
+																				<td><input type="text" class="form-control"
+																					id="tTOBuyerCountry"></td>
+																				<td><input type="checkbox" name="tTOIsAss"></td>
+																				<td><input type="number" step="1" min="0"
+																					class="form-control" id="tTONoYears"></td>
+																				<td><select class="form-control" id="tTOTop">
+																						<option class="form-control">Advance</option>
+																						<option class="form-control">L/C Sight or
+																							LC Usance</option>
+																						<option class="form-control">Non-L/C
+																							(DP/CAD or DA)</option>
+																						<option class="form-control">Others</option>
+																				</select></td>
+																				<td><input type="number" min="0"
+																					class="form-control" id="tTOShipVal"></td>
+																				<td><input type="number" min="0"
+																					class="form-control" id="tTOMaxExp"></td>
+																				<td><input type="number" min="0"
+																					class="form-control" id="tTOPer"></td>
+																				<td><button class="btn btn-outline btn-primary"
+																						id="btnAddTO">Add</button></td>
+																			</tr>
+																		</tbody>
+																		<tbody id="newExpTORow">
+																		</tbody>
+																	</table>
+																</div>
+															</div>
+														</div>
+														<br /> <br />
+														<button class="btn btn-success" style="float: right;"
+															id="btnTab1Next">next</button>
+													</div>
+												</div>
+
+											</div>
+											<div id="divTab2">
+												<div class="row">
+													<div class="col-lg-12" id="formDiv">
+														<h2>Step2</h2>
+														<div class="card">
+															<div class="card-body">
+																<div style="padding: 20px">
+																	<div class="row">
+
+																		<div class="col">
+																			<h4>2. Debtors distribution as on date</h4>
+																		</div>
+																		<div>
+																			<input type="date" class="form-control" /> <label>Please
+																				specify the date</label>
+																		</div>
+
+																	</div>
+
+																	<br>
+																	<div class="table-responsive">
+
+																		<table
+																			class="table table-striped table-bordered table-hover">
+																			<thead>
+																				<tr>
+																					<th rowspan="2">Outstanding balance per
+																						buyer(in INR)</th>
+																					<th rowspan="2">Number of Buyers</th>
+																					<th colspan="2">Total amount of debtor
+																						outstanding terms of payment wise(in INR)</th>
+
+																					<th rowspan="2"></th>
+																				</tr>
+																				<tr>
+																					<th>TOP</th>
+																					<th>Amount</th>
+																				</tr>
+																			</thead>
+																			<tbody>
+																				<tr>
+																					<td><select class="form-control"
+																						id="outstandingAmountRange"
+																						name="outstandingAmount">
+																							<option class="form-control">Upto
+																								25,00,000</option>
+																							<option class="form-control">Above
+																								25,00,000 upto 50,00,000</option>
+																							<option class="form-control">Above
+																								50,00,000 upto 1,00,00,000</option>
+																							<option class="form-control">Above
+																								1,00,00,000</option>
+																					</select></td>
+																					<td><input type="number" min="0"
+																						class="form-control" id="numberOfBuyers"
+																						name="numberOfBuyers" /></td>
+																					<td><select class="form-control" id="topRange"
+																						name="topRange">
+																							<option class="form-control">On LC</option>
+																							<option class="form-control">On Non LC</option>
+																							<option class="form-control">Others</option>
+																					</select></td>
+																					<td><input type="number" min="0"
+																						class="form-control" id="distributedAmount"
+																						name="distributedAmount" /></td>
+																					<td><button
+																							class="btn btn-outline btn-primary"
+																							id="btnAddExperienceEntry"
+																							onclick="addDebtorDetails()">Add</button></td>
+																				</tr>
+																			</tbody>
+																			<tbody id="newRowDebtorDistribution">
+																			</tbody>
+																		</table>
+
+
+																	</div>
+																</div>
+
+															</div>
+														</div>
+														<br /> <br />
+														<button class="btn btn-success" style="float: left;"
+															id="btnTab2Prev">previous</button>
+														<button class="btn btn-success" style="float: right;"
+															id="btnTab2Next">next</button>
+													</div>
+												</div>
+											</div>
+											<div id="divTab3">
+												<div class="row">
+													<div class="col-lg-12">
+														<h2>Step3</h2>
+														<div class="card">
+															<div class="card-body">
+																<div style="padding: 20px">
+																	<div class="row">
+
+																		<div class="col">
+																			<h4>3. Age-wise debtor analysis as on date</h4>
+																		</div>
+																		<div>
+																			<input type="date" class="form-control" /> <label>Please
+																				specify the date</label>
+																		</div>
+																	</div>
+
+
+																	<br>
+																	<table
+																		class="table table-striped table-bordered table-hover">
+																		<thead>
+																			<tr>
+																				<th>Ageing(in days)</th>
+																				<th>Days Outstanding</th>
+																				<th>Amount(in INR)</th>
+																			</tr>
+																		</thead>
+																		<tbody>
+																			<tr>
+																				<td rowspan="4">Not yet due for payment (i.e.
+																					Outstanding)</td>
+																				<td>0 - 90</td>
+																				<td><input type="number" min="0"
+																					class="form-control" /></td>
+																			</tr>
+																			<tr>
+																				<td>91 - 180</td>
+																				<td><input type="number" min="0"
+																					class="form-control" /></td>
+																			</tr>
+																			<tr>
+																				<td>181 - 270</td>
+																				<td><input type="number" min="0"
+																					class="form-control" /></td>
+																			</tr>
+																			<tr>
+																				<td>Total</td>
+																				<td><input type="number" min="0"
+																					class="form-control" /></td>
+																			</tr>
+
+																			<tr>
+																				<td rowspan="4">Past the due date(i.e. Overdue)</td>
+																				<th>Days Overdue</th>
+																				<th>Amount(in INR)</th>
+																			</tr>
+																			<tr>
+																				<td>&lt; 30 days</td>
+																				<td><input type="number" min="0"
+																					class="form-control" /></td>
+																			</tr>
+																			<tr>
+																				<td>> 30 days</td>
+																				<td><input type="number" min="0"
+																					class="form-control" /></td>
+																			</tr>
+																			<tr>
+																				<td>Total</td>
+																				<td><input type="number" min="0"
+																					class="form-control" /></td>
+																			</tr>
+
+
+																		</tbody>
+
+																	</table>
+																</div>
+															</div>
+														</div>
+														<br /> <br />
+														<button class="btn btn-success" style="float: left;"
+															id="btnTab3Prev">previous</button>
+														<button class="btn btn-success" style="float: right;"
+															id="btnTab3Next">Next</button>
+													</div>
+												</div>
+											</div>
+											<div id="divTab4">
+												<div class="row">
+													<div class="col-lg-12">
+														<h2>Step4</h2>
+														<div class="card">
+															<div class="card-body">
+																<div style="padding: 20px">
+																	<div class="row">
+
+																		<div class="col">
+																			<h4>4. Overdue details as on date</h4>
+																		</div>
+																		<div>
+																			<input type="date" class="form-control" /> <label>Please
+																				specify the date</label>
+																		</div>
+
+																	</div>
+
+																	<br> <label>Please fill the Overdue
+																		details for bills remaining unpaid for more than 30
+																		days in the below table</label>
+																	<table
+																		class="table table-striped table-bordered table-hover">
+																		<thead>
+																			<tr>
+																				<th>Name &amp; address of the buyers</th>
+																				<th>Shipments effected during (specify the
+																					Period)</th>
+																				<th>Terms of payment</th>
+																				<th>Amount overdue(in INR)</th>
+																				<th>No. of days beyond the earliest due date</th>
+																				<th>Reason for overdue with its brief detail of
+																					action taken</th>
+																				<th></th>
+																			</tr>
+																		</thead>
+																		<tbody>
+																			<tr>
+																				<td><input type="textarea" rows="3"
+																					class="form-control" /></td>
+																				<td><input type="date" class="form-control" />
+																					to <input type="date" class="form-control" /></td>
+																				<td><select class="form-control" id="topList"
+																					name="tdTop">
+																						<option class="form-control">Advance</option>
+																						<option class="form-control">LC Sight</option>
+																						<option class="form-control">DA-30</option>
+																						<option class="form-control">DA-60</option>
+																						<option class="form-control">DA-90</option>
+																						<option class="form-control">DA-180</option>
+																						<option class="form-control">DA-270</option>
+																						<option class="form-control">DP</option>
+																						<option class="form-control">LC</option>
+																				</select></td>
+																				<td><input type="number" min="0"
+																					class="form-control" id="txtValueOfShipment"
+																					name="tdValueOfShipment" /></td>
+																				<td><input type="number" min="0"
+																					class="form-control" id="txtValueOfShipment"
+																					name="tdValueOfShipment" /></td>
+																				<td><input type="textarea" rows="3"
+																					class="form-control"> </textarea></td>
+
+
+																				<td><button class="btn btn-outline btn-primary"
+																						id="btnAddExperienceEntry">Add</button></td>
+																			</tr>
+																		</tbody>
+																		<tbody id="newRow">
+																		</tbody>
+																	</table>
+																</div>
+															</div>
+														</div>
+														<br /> <br />
+														<button class="btn btn-success" style="float: left;"
+															id="btnTab4Prev">previous</button>
+														<button class="btn btn-success" style="float: right;"
+															id="btnTab4Next">Next</button>
+													</div>
+												</div>
+											</div>
+											<div id="divTab5">
+												<div class="row">
+													<div class="col-lg-12">
+														<h2>Step5</h2>
+														<div class="card">
+															<div class="card-body">
+																<div style="padding: 20px">
+																	<div class="row">
+
+																		<div class="col">
+																			<h4>5. Projected Turnover for the next 12 months
+																				i.e for the period</h4>
+																		</div>
+																		<div>
+																			<input type="date" class="form-control" />
+																		</div>
+																		<div>&nbsp; to &nbsp;</div>
+																		<div>
+																			<input type="date" class="form-control" />
+																		</div>
+
+																	</div>
+																	<br>
+																	<table
+																		class="table table-striped table-bordered table-hover">
+																		<thead>
+																			<tr>
+																				<th>Total Projected Sales Turnover (In INR)</th>
+																				<th>Total Projected Export Turnover (In INR)</th>
+																				<th colspan="2">Percentage of export turnover
+																					projected on</th>
+																			</tr>
+																		</thead>
+																		<tbody>
+																			<tr>
+																				<td rowspan="3"><input type="number" min="0"
+																					class="form-control" id="txtValueOfShipment"
+																					name="tdValueOfShipment" /></td>
+																				<td rowspan="3"><input type="number" min="0"
+																					class="form-control" id="txtValueOfShipment"
+																					name="tdValueOfShipment" /></td>
+																				<td>Advance</td>
+																				<td><input type="number" min="0"
+																					class="form-control" id="txtValueOfShipment"
+																					name="tdValueOfShipment" /></td>
+																			</tr>
+																			<tr>
+																				<td>LC</td>
+																				<td><input type="number" min="0"
+																					class="form-control" id="txtValueOfShipment"
+																					name="tdValueOfShipment" /></td>
+																			</tr>
+																			<tr>
+																				<td>Non-LC</td>
+																				<td><input type="number" min="0"
+																					class="form-control" id="txtValueOfShipment"
+																					name="tdValueOfShipment" /></td>
+																			</tr>
+
+																		</tbody>
+																		<tbody id="newRow">
+																		</tbody>
+																	</table>
+																</div>
+															</div>
+														</div>
+														<br /> <br />
+														<button class="btn btn-success" style="float: left;"
+															id="btnTab5Prev">previous</button>
+														<button class="btn btn-success" style="float: right;"
+															id="btnTab5Next">Next</button>
+													</div>
+												</div>
+											</div>
+											<div id="divTab6">
+												<div class="row">
+													<div class="col-lg-12">
+														<h2>Step6</h2>
+														<div class="card">
+															<div class="card-body">
+																<div style="padding: 20px">
+																	<div class="row">
+
+																		<div class="col">
+																			<h4>6. Details of projected export turnover for
+																				the next 12 calendar months (Please mention):-</h4>
+																		</div>
+																		<div>
+																			<input type="number" class="form-control" /> <label>Rs
+																				in Lakhs</label>
+																		</div>
+
+																	</div>
+																	<br> <label>In case the name of all buyers
+																		is not known, you may mention the name of the country
+																		where you anticipate export business in the next 12
+																		months</label>
+																	<div class="table-responsive">
+																		<table
+																			class="table table-striped table-bordered table-hover">
+																			<thead>
+																				<tr>
+																					<th>Name of the major buyers</th>
+																					<th>Buyer Country</th>
+																					<th>Is Associate?</th>
+																					<th>No.of years dealing with buyer</th>
+																					<th>TOP</th>
+																					<th>Total projected exxport turnover</th>
+																					<th>Anticipated Maximum exposure at any time</th>
+																					<th>% exports of the buyer to the total
+																						exports</th>
+																					<th></th>
+																				</tr>
+																			</thead>
+																			<tbody>
+																				<tr>
+																					<td><input type="text" class="form-control"
+																						id="tTOBuyerName1"></td>
+																					<td><input type="text" class="form-control"
+																						id="tTOBuyerCountry1"></td>
+																					<td><input type="checkbox" name="tTOIsAss"></td>
+																					<td><input type="number" step="1" min="0"
+																						class="form-control" id="tTONoYears1"></td>
+																					<td><select class="form-control" id="tTOTop">
+																							<option class="form-control">Advance</option>
+																							<option class="form-control">L/C Sight
+																								or LC Usance</option>
+																							<option class="form-control">Non-L/C
+																								(DP/CAD or DA)</option>
+																							<option class="form-control">Others</option>
+																					</select></td>
+																					<td><input type="number" min="0"
+																						class="form-control" id="tTOShipVal1"></td>
+																					<td><input type="number" min="0"
+																						class="form-control" id="tTOMaxExp1"></td>
+																					<td><input type="number" min="0"
+																						class="form-control" id="tTOPer1"></td>
+																					<td><button
+																							class="btn btn-outline btn-primary"
+																							id="btnAddTO1">Add</button></td>
+																				</tr>
+																			</tbody>
+																			<tbody id="newExpTORow1">
+																			</tbody>
+																		</table>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<br /> <br />
+														<button class="btn btn-success" style="float: left;"
+															id="btnTab6Prev">previous</button>
+														<button class="btn btn-success" style="float: right;"
+															id="btnTab6Next">Next</button>
+													</div>
+												</div>
+											</div>
+											<div id="divTab7">
+												<div class="row">
+													<div class="col-lg-12">
+														<h2>Step7</h2>
+														<div class="card">
+															<div class="card-body">
+																<div style="padding: 20px">
+																	<div class="row">
+
+																		<div class="col">
+																			<h4>7. Optional Cover Required (Mark Yes,
+																				wherever applicable)</h4>
+																		</div>
+
+																	</div>
+
+																	<div class="form-group">
+																		<b><label>a) Exports against Letters of
+																				Credit (L/C):</label></b> <br> <br> <select
+																			class="form-control" name="7a">
+																			<option class="form-control">No cover
+																				required</option>
+																			<option class="form-control">Cover for only
+																				Political Risks</option>
+																			<option class="form-control">Cover for
+																				Political Risks and Commercial Risks on L/C Bank</option>
+
+																		</select> <br> <label> (PLEASE NOTE THAT BY
+																			MARKING ‘YES’, IN RESPECT OF (ii) OR (iii), ALL
+																			SHIPMENTS ON L/C DURING THE POLICY PERIOD SHALL BE
+																			MANDATORY TO BE OFFERED FOR INSURANCE AND DECLARED.
+																			COVER IS AVAILABLE SUBJECT TO SUITABLE ENDORSEMENT
+																			THROUGH ISSUANCE OF SUPPLEMENT POLICY) </label>
+																	</div>
+																	<br>
+
+																	<div class="form-group">
+																		<b><label>b) Exports to Associate/Sister
+																				Concern:</label></b> <br> <br> <select
+																			class="form-control" name="7b">
+																			<option class="form-control">No cover
+																				required</option>
+																			<option class="form-control">Cover for only
+																				Political Risks</option>
+																			<option class="form-control">Cover for
+																				Political Risks and Insolvency Risk of the
+																				Associate/Sister concern</option>
+
+																		</select> <br> <label>(PLEASE NOTE THAT COVER IS
+																			AVAILABLE ON SELECTIVE BASIS SUBJECT TO CREDIT
+																			ASSESSMENT ON RECEIPT OF CREDIT LIMIT APPLICATION
+																			SEPERATELY AS DISCRETIONARY LIMITS ARE NOT
+																			APPLICABLE. ALSO NOTE THAT THE EXPORTS SHOULD NOT BE
+																			ON CONSIGNMENT BASIS). </label>
+
+																	</div>
+																	<br>
+
+																	<div class="form-group">
+																		<b><label> c) Cover for Deemed Exports:</label></b> <br>
+																		<br> <select class="form-control" name="7c">
+																			<option class="form-control">No cover
+																				required</option>
+																			<option class="form-control">Cover is
+																				required</option>
+
+
+																		</select> <br> <label> (PLEASE NOTE THAT COVER IS
+																			AVAILABLE SUBJECT TO SUITABLE ENDORSEMENT UNDER THE
+																			POLICY. THE COVER IS AVAILABLE SUBJECT TO CREDIT
+																			ASSESSMENT ON RECEIPT OF CREDIT LIMIT APPLICATION
+																			SEPERATELY AS DISCRETIONARY LIMITS ARE NOT
+																			APPLICABLE) </label>
+
+
+																	</div>
+																	<br>
+
+																	<div class="form-group">
+																		<b><label>d) Cover for Merchanting Trade /
+																				Third Country Exports :</b></label> <br> <select
+																			class="form-control" name="7d">
+																			<option class="form-control">No cover
+																				required</option>
+																			<option class="form-control">Cover is
+																				required</option>
+
+
+																		</select> <br> <label> (PLEASE MENTION NAME OF
+																			SUCH COUNTRIES WHEREFROM THE CONSIGNMENT ORIGINATES
+																			IN THE FORMAT BELOW. ANY SUBSEQUENT
+																			INCLUSION/DELETION OF COUNTRIES SHALL HAVE TO BE
+																			REPORTED. COVER IS AVAILABLE SUBJECT TO SUITABLE
+																			ENDORSEMENT UNDER THE POLICY. ALL SUCH SHIPMENTS FROM
+																			THESE SPECIFIED COUNTRIES NEED TO BE DECLARED) </label>
+
+																	</div>
+																	<br>
+
+																	<div class="table-responsive">
+																		<table
+																			class="table table-striped table-bordered table-hover">
+																			<thead>
+																				<tr>
+																					<th>Sr. No.</th>
+																					<th>Name of the Buyer and Address</th>
+																					<th>Buyer's Country</th>
+																					<th>Merchanting country/ies</th>
+																					<th>Terms of Payment</th>
+																					<th>Projected Export Turnover</th>
+																					<th></th>
+																				</tr>
+																			</thead>
+																			<tbody>
+																				<tr>
+																					<td><input type="text" class="form-control"
+																						value="1" /></td>
+																					<td><input type="text" class="form-control" /></td>
+																					<td><input type="text" class="form-control" /></td>
+																					<td><input type="text" class="form-control" /></td>
+																					<td><select class="form-control">
+																							<option class="form-control">Advance</option>
+																							<option class="form-control">LC Sight</option>
+																							<option class="form-control">DA-30</option>
+																							<option class="form-control">DA-60</option>
+																							<option class="form-control">DA-90</option>
+																							<option class="form-control">DA-180</option>
+																							<option class="form-control">DA-270</option>
+																							<option class="form-control">DP</option>
+																							<option class="form-control">LC</option>
+																					</select></td>
+																					<td><input type="number" step="1" min="0"
+																						class="form-control" id="tTONoYears1" /></td>
+
+																					<td><button
+																							class="btn btn-outline btn-primary"
+																							id="btnAddTO111">Add</button></td>
+																				</tr>
+																			</tbody>
+																			<tbody id="newExpTORow1">
+																			</tbody>
+																		</table>
+																	</div>
+																	<br>
+																	<div class="form-group">
+																		<b><label>e) Any other: Please specify
+																				your requirement :</b></label> <br>
+
+																		<textarea rows="4" class="form-control"></textarea>
+																	</div>
+
+																</div>
+															</div>
+														</div>
+														<br /> <br />
+														<button class="btn btn-success" style="float: left;"
+															id="btnTab7Prev">previous</button>
+														<button class="btn btn-success" style="float: right;"
+															onClick="showAlert()">Submit</button>
+													</div>
+												</div>
+											</div>
+
+</div>
+</div>
+</div>
+</div>
+										</div>
+									</div>
+								</div>
+
+</body>
+</html>
